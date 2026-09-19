@@ -1,0 +1,41 @@
+# ===== 编译产物 =====
+*.exe
+*.out
+*.o
+*.obj
+*.a
+*.lib
+*.class
+*.jar
+
+# ===== 调试/中间文件 =====
+*.pdb
+*.ilk
+*.idb
+*.gcda
+*.gcno
+*.dSYM/
+
+# ===== 构建目录 =====
+build/
+bin/
+dist/
+output/
+cmake-build-*/
+
+# ===== 编辑器/IDE =====
+.vscode/
+.idea/
+*.code-workspace
+*.sln
+*.vcxproj*
+*.user
+
+# ===== 操作系统 =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== 其他 =====
+*.log
+*.tmp
