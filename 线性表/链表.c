@@ -20,7 +20,6 @@ typedef struct  LNode
     Student data;
     struct LNode *next;
 }LNode,*Linklist;
-
 //声明并实现实现各种方法的函数
 void CreateLink_w(Linklist*L,int n);
 void ShowList(Linklist L);
@@ -45,6 +44,7 @@ void CreateLink_w(Linklist*L,int n){
         r=s;
     }
 }
+
 
 void ShowList(Linklist L){
     Linklist p=L->next;
