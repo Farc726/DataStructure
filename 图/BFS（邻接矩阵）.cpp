@@ -1,5 +1,6 @@
 #include<iostream>
 #include<queue>
+#include<cstring>
 using namespace std;
 //正无穷
 #define INF 0x3f3f3f3f
@@ -20,8 +21,6 @@ typedef struct{
     VerTexType vexs[MAXV];
     //边二维数组
     AtcType arcs[MAXV][MAXV];
-    //遍历标志
-    bool visited[MAXV];
 }AMGraph;
 
 int LocatIndex(AMGraph G,VerTexType v){
@@ -51,7 +50,6 @@ bool CreateGraph(AMGraph &G){
         for(int j=0;j<G.vexnum;j++){
             G.arcs[i][j]=INF;
         }
-        G.visited[i]=false;
     }
     //这里没有用到定位函数
     //先自己画出矩阵后置予权值
@@ -90,22 +88,23 @@ void Print(AMGraph G){
 }
 //接下来先写连通图的BFS邻接矩阵版
 //参数为  1.遍历哪个图  2.从这个图的哪个节点开始遍历
-void BFS(AMGraph &G,int v){
+//这时候（独立出了visited）其实直接值传递也可以了 但是还是用常量引用更干净稳妥
+void BFS(const AMGraph &G,int v,bool visited[]){
     //广度优先遍历需要借助一个队列（参考树的广度优先遍历）
     queue<int> q;
     //先将开始节点的下标入队
     q.push(v);
-    G.visited[v]=true;
+    visited[v]=true;
     cout<<G.vexs[v]<<" ";
     while(!q.empty()){
         //如果不是空的就取出队首节点
         int cur=q.front();
         q.pop();
         for(int i=0;i<G.vexnum;i++){
-            if(G.arcs[cur][i]!=INF&&G.visited[i]==false){
+            if(G.arcs[cur][i]!=INF&&visited[i]==false){
                 cout<<G.vexs[i]<<" ";
                 q.push(i);
-                G.visited[i]=true;
+                visited[i]=true;
             }
         }
     }
@@ -113,11 +112,18 @@ void BFS(AMGraph &G,int v){
 }
 
 //若可能为非连通图
-void BFSG(AMGraph &G,int v){
-    BFS(G,v);
+void BFSG(const AMGraph &G,int v){
+    //将visited数组独立出来 防止多次遍历的时候要重复初始化
+    bool visited[MAXV];
+    //初始化为false
+    memset(visited,false,sizeof(visited));	
+    //加一步判断
+    if(v>=0&&v<G.vexnum&&visited[v]==false){
+        BFS(G,v,visited);
+    }
     for(int i=0;i<G.vexnum;i++){
-        if(G.visited[i]==false){
-            BFS(G,i);
+        if(visited[i]==false){
+            BFS(G,i,visited);
         }
     }
 }
