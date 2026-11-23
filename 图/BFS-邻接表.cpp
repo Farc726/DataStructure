@@ -114,24 +114,29 @@ void Print(ALGraph G){
 }
 
 void BFS(const ALGraph &G,int v,bool visited[]){
-    queue<int> q;
-    q.push(v);
-    cout<<G.Vecs[v].data<<" ";
+    //因为是BFS我们需要借助队列辅助实现
+    queue<int> qu;
+    //首先把第一个元素下标压入队列
+    //注意！！ 压入队列的时候就是访问这个元素的时刻
+    //而这个元素出队则代表着遍历这个跟元素有边相连的元素！！
+    qu.push(v);
     visited[v]=true;
-    while(!q.empty()){
-        //BFS一经访问就要输出 把他压入队列只是为了遍历
-        int cur=q.front();
-        q.pop();
+    cout<<G.Vecs[v].data<<" ";
+    while(!qu.empty()){
+        //弹出队首元素目的是遍历与这个元素相联的元素
+        int cur=qu.front();
+        qu.pop();
         ArcNode* p=G.Vecs[cur].firstarc;
         while(p!=NULL){
+            //也是一样的逻辑入队代表访问（两者紧跟）
             if(visited[p->adjvex]==false){
-                cout<<G.Vecs[p->adjvex].data<<" ";
+                qu.push(p->adjvex);
                 visited[p->adjvex]=true;
-                q.push(p->adjvex);
+                cout<<G.Vecs[p->adjvex].data<<" ";
+                
             }
             p=p->nextarc;
         }
-
     }
 }
 
